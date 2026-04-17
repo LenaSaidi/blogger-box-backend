@@ -1,8 +1,8 @@
-package dauphine.Medium.Controller;
+package dauphine.Medium.controllers;
 
 import dauphine.Medium.dto.CreationPostRequest;
 import dauphine.Medium.dto.UpdatePostRequest;
-import dauphine.Medium.Model.Post;
+import dauphine.Medium.models.Post;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;

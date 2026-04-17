@@ -1,4 +1,4 @@
-package dauphine.Medium.Model;
+package dauphine.Medium.models;
 
 import java.util.UUID;
 
