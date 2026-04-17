@@ -48,7 +48,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an existing category")
-    public UUID delete(@PathVariable UUID id) {
+    public boolean delete(@PathVariable UUID id) {
         return service.deleteById(id);
     }
 }

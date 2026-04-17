@@ -53,9 +53,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public UUID deleteById(UUID id) {
-        temporaryCategories.removeIf(c -> c.getId().equals(id));
-        return id;
+    public boolean deleteById(UUID id) {
+        return temporaryCategories.removeIf(c -> c.getId().equals(id));
     }
 
 }
