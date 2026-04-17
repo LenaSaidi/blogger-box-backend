@@ -2,12 +2,17 @@ spring:
   application:
     name: Medium
 
-  datasource:
-    url: jdbc:postgresql://db.bicxsvhuufgneaoouxys.supabase.co:5432/postgres
-    username: postgres
-    password: @Medium2026@
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
+  config:
+    import: optional:file:.env[.properties]
 
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
