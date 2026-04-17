@@ -7,6 +7,7 @@ import java.util.UUID;
 public interface PostService {
     List<Post> getAllByCategoryId(UUID categoryId);
     List<Post> getAll();
+    List<Post> getAllLikeTitleOrContent(String value);
     Post getById(UUID id);
     Post create(String title, String content, UUID categoryId);
     Post update(UUID id, String title, String content);

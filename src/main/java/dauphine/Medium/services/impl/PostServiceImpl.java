@@ -27,6 +27,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getAllLikeTitleOrContent(String value) {
+        if (value == null || value.isEmpty()) {
+            return List.of();
+        }
+        return repository.findAllLikeTitleOrContent(value);
+    }
+
+    @Override
     public List<Post> getAllByCategoryId(UUID categoryId) {
         return repository.findAllByCategoryId(categoryId);
     }

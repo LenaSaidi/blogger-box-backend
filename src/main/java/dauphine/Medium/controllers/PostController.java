@@ -23,9 +23,15 @@ public class PostController {
     }
 
     @GetMapping
-    @Operation(summary = "Retrieve all posts ordered by creation date")
-    public List<Post> retrieveAll() {
-        return service.getAll();
+    @Operation(
+            summary = "Get all posts",
+            description = "Retrieve all posts or filter by title or content"
+    )
+    public List<Post> getAll(@RequestParam(required = false) String value) {
+        List<Post> posts = value == null || value.isBlank()
+                ? service.getAll()
+                : service.getAllLikeTitleOrContent(value);
+        return posts;
     }
 
     @GetMapping("/category/{categoryId}")
