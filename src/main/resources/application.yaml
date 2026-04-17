@@ -2,3 +2,12 @@ spring:
   application:
     name: Medium
 
+  datasource:
+    url: jdbc:postgresql://db.bicxsvhuufgneaoouxys.supabase.co:5432/postgres
+    username: postgres
+    password: @Medium2026@
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+

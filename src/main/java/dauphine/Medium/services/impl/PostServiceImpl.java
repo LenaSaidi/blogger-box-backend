@@ -19,23 +19,19 @@ public class PostServiceImpl implements PostService {
 
     public PostServiceImpl() {
         this.temporaryPosts = new ArrayList<>();
-        temporaryPosts.add(new Post(UUID.randomUUID(), "Mon premier article", "Contenu 1", Timestamp.from(Instant.now()), UUID.randomUUID()));
-        temporaryPosts.add(new Post(UUID.randomUUID(), "Actualité sport", "Contenu 2", Timestamp.from(Instant.now()), UUID.randomUUID()));
+        temporaryPosts.add(new Post(UUID.randomUUID(), "Mon premier article", "Contenu du premier article", Timestamp.from(Instant.now()), UUID.randomUUID()));
+        temporaryPosts.add(new Post(UUID.randomUUID(), "Actualité sport", "Contenu sport", Timestamp.from(Instant.now()), UUID.randomUUID()));
     }
 
     @Override
     public List<Post> getAll() {
-        // Ordonné par date de création (le plus récent en premier)
-        return temporaryPosts.stream()
-                .sorted(Comparator.comparing(Post::getCreatedDate).reversed())
-                .collect(Collectors.toList());
+        return temporaryPosts;
     }
 
     @Override
     public List<Post> getAllByCategoryId(UUID categoryId) {
         return temporaryPosts.stream()
                 .filter(p -> p.getCategoryId().equals(categoryId))
-                .sorted(Comparator.comparing(Post::getCreatedDate).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +52,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post update(UUID id, String title, String content) {
-        Post post = getById(id);
+        Post post = temporaryPosts.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .orElse(null);
         if (post != null) {
             post.setTitle(title);
             post.setContent(content);

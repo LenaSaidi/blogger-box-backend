@@ -1,65 +1,55 @@
 package dauphine.Medium.models;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
-import java.sql.Timestamp;
 
+@Entity
+@Table(name = "post")
 public class Post {
-    private UUID id;
-    private String title;
-    private String content;
-    private Timestamp createdDate;
-    private UUID categoryId;
 
-    // Constructeur vide
+    @Id
+    @Column(name = "id")
+    private UUID id;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // Constructeur vide — OBLIGATOIRE pour JPA
     public Post() {}
 
     // Constructeur avec paramètres
-    public Post(UUID id,String title, String content, Timestamp createdDate, UUID categoryId) {
-        this.id = id;
+    public Post(String title, String content, Category category) {
+        this.id = UUID.randomUUID();
         this.title = title;
         this.content = content;
-        this.createdDate = createdDate;
-        this.categoryId = categoryId;
+        this.createdDate = LocalDateTime.now();
+        this.category = category;
     }
 
-    // Getters & Setters
-    public UUID getId() {
-        return id;
-    }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Timestamp getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Timestamp createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public UUID getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(UUID categoryId) {
-        this.categoryId = categoryId;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 }
