@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import dauphine.Medium.models.Category;
 import dauphine.Medium.repositories.PostRepository;
 import dauphine.Medium.repositories.CategoryRepository;
+import dauphine.Medium.exceptions.CategoryNotFoundByIdException;
+import dauphine.Medium.exceptions.PostNotFoundByIdException;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,25 +42,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getById(UUID id) {
+    public Post getById(UUID id) throws PostNotFoundByIdException {
         return repository.findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new PostNotFoundByIdException(id));
     }
 
     @Override
-    public Post create(String title, String content, UUID categoryId) {
+    public Post create(String title, String content, UUID categoryId) throws CategoryNotFoundByIdException {
         Category category = categoryRepository.findById(categoryId)
-                .orElse(null);
+                .orElseThrow(() -> new CategoryNotFoundByIdException(categoryId));
         Post post = new Post(title, content, category);
         return repository.save(post);
     }
 
     @Override
-    public Post update(UUID id, String title, String content) {
+    public Post update(UUID id, String title, String content) throws PostNotFoundByIdException {
         Post post = getById(id);
-        if (post == null) {
-            return null;
-        }
         post.setTitle(title);
         post.setContent(content);
         return repository.save(post);

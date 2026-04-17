@@ -4,6 +4,7 @@ import dauphine.Medium.models.Category;
 import dauphine.Medium.repositories.CategoryRepository;
 import dauphine.Medium.services.CategoryService;
 import org.springframework.stereotype.Service;
+import dauphine.Medium.exceptions.CategoryNotFoundByIdException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getById(UUID id) {
+    public Category getById(UUID id) throws CategoryNotFoundByIdException {
         return repository.findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new CategoryNotFoundByIdException(id));
     }
+
 
     @Override
     public Category create(String name) {
@@ -44,11 +46,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category update(UUID id, String name) {
+    public Category update(UUID id, String name) throws CategoryNotFoundByIdException {
         Category category = getById(id);
-        if (category == null) {
-            return null;
-        }
         category.setName(name);
         return repository.save(category);
     }

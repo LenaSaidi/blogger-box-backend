@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
+    List<Post> findAllByCategoryId(UUID categoryId);
+
     @Query("""
         SELECT post
         FROM Post post

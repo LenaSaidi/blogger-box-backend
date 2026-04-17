@@ -5,6 +5,11 @@ import dauphine.Medium.models.Post;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import dauphine.Medium.exceptions.CategoryNotFoundByIdException;
+import dauphine.Medium.exceptions.PostNotFoundByIdException;
+import org.springframework.http.ResponseEntity;
+import java.net.URI;
+
 
 
 import java.util.List;
@@ -27,40 +32,45 @@ public class PostController {
             summary = "Get all posts",
             description = "Retrieve all posts or filter by title or content"
     )
-    public List<Post> getAll(@RequestParam(required = false) String value) {
+    public ResponseEntity<List<Post>> getAll(@RequestParam(required = false) String value) {
         List<Post> posts = value == null || value.isBlank()
                 ? service.getAll()
                 : service.getAllLikeTitleOrContent(value);
-        return posts;
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/category/{categoryId}")
     @Operation(summary = "Retrieve all posts per a category")
-    public List<Post> retrieveByCategory(@PathVariable UUID categoryId) {
-        return service.getAllByCategoryId(categoryId);
+    public ResponseEntity<List<Post>> retrieveByCategory(@PathVariable UUID categoryId) {
+        return ResponseEntity.ok(service.getAllByCategoryId(categoryId));
     }
 
     @PostMapping
     @Operation(summary = "Create a new post")
-    public Post create(
+    public ResponseEntity<Post> create(
             @RequestParam String title,
             @RequestParam String content,
-            @RequestParam UUID categoryId) {
-        return service.create(title, content, categoryId);
+            @RequestParam UUID categoryId) throws CategoryNotFoundByIdException {
+        Post post = service.create(title, content, categoryId);
+        return ResponseEntity
+                .created(URI.create("/v1/posts/" + post.getId()))
+                .body(post);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing post")
-    public Post update(
+    public ResponseEntity<Post> update(
             @PathVariable UUID id,
             @RequestParam String title,
-            @RequestParam String content) {
-        return service.update(id, title, content);
+            @RequestParam String content) throws PostNotFoundByIdException {
+        Post post = service.update(id, title, content);
+        return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an existing post")
-    public boolean delete(@PathVariable UUID id) {
-        return service.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
